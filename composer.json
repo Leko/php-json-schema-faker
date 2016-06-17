@@ -1,0 +1,15 @@
+{
+    "name": "leko/json-schema-faker",
+    "description": "Create dummy data with JSON schema",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Leko",
+            "email": "leko.noor@gmail.com"
+        }
+    ],
+    "require": {
+        "fzaninotto/faker": "^1.6"
+    }
+}
