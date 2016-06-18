@@ -6,7 +6,7 @@ dependencies:
   cache_directories:
     - ~/.composer/cache
   override:
-    - ./composer.phar install
+    - ./composer.phar update
   post:
     - sed -i 's/^;//' /opt/circleci/php/$(phpenv global)/etc/conf.d/xdebug.ini
 
