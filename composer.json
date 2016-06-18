@@ -21,5 +21,14 @@
         "psr-4": {
             "JSONSchemaFaker\\": "src/"
         }
+    },
+    "scripts": {
+        "test": [
+            "phpunit test/"
+        ],
+        "lint": [
+            "phpmd src/ test/",
+            "phpcbs src/ test/"
+        ]
     }
 }
