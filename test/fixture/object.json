@@ -15,6 +15,19 @@
     "typeOnly": {
       "type": "object"
     },
+    "typeAndMinProperties": {
+      "type": "object",
+      "minProperties": 5
+    },
+    "typeAndMaxProperties": {
+      "type": "object",
+      "maxProperties": 5
+    },
+    "typeAndMinPropertiesAndMaxProperties": {
+      "type": "object",
+      "minProperties": 2,
+      "maxProperties": 10
+    },
     "typeAndAdditionalPropertiesFalse": {
       "type": "object",
       "additionalProperties": false
