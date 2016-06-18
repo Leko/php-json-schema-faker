@@ -10,13 +10,14 @@ Inspire from [json-schema-faker](https://github.com/json-schema-faker/json-schem
 composer require leko/json-schema-faker
 ```
 
-If schema has references(`$ref`), please use with []().
+If schema has references(`$ref`), please use with [justinrainbow/json-schema](https://github.com/justinrainbow/json-schema).
 
 ```php
 <?php
 
 require_once 'PATH/TO/vendor/autoload.php';
 
+use JSONSchemaFaker\Faker;
 use JsonSchema\RefResolver;
 use JsonSchema\Uri\UriRetriever;
 use JsonSchema\Uri\UriResolver;
@@ -24,7 +25,7 @@ use JsonSchema\Uri\UriResolver;
 $refResolver = new RefResolver(new UriRetriever(), new UriResolver());
 $schema = $refResolver->resolve('file://' . realpath('schema.json'));
 
-$dummy = JSONSchemaFaker\fake($schema);
+$dummy = Faker::fake($schema);
 ```
 
 ## Contribution
