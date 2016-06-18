@@ -11,5 +11,14 @@
     ],
     "require": {
         "fzaninotto/faker": "^1.6"
+    },
+    "autoload": {
+        "files": [
+            "./src/helper.php",
+            "./src/fake.php"
+        ],
+        "psr-4": {
+            "JSONSchemaFaker\\": "src/"
+        }
     }
 }
