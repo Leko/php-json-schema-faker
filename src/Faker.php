@@ -10,12 +10,6 @@ namespace JSONSchemaFaker;
 use Faker\Provider\Base;
 use Faker\Provider\Lorem;
 
-/**
- * ## Example
- * ```php
- * $dummy = Faker::fake($schema);
- * ```
- */
 class Faker
 {
     /**
@@ -71,7 +65,7 @@ class Faker
     /**
      * Create null
      *
-     * @return                                      null
+     * @return null
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeNull()
@@ -82,7 +76,7 @@ class Faker
     /**
      * Create dummy boolean with JSON schema
      *
-     * @return                                      boolean true or false
+     * @return bool true or false
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeBoolean()
@@ -93,8 +87,8 @@ class Faker
     /**
      * Create dummy integer with JSON schema
      *
-     * @param                                       \stdClass $schema Data structure
-     * @return                                      ...
+     * @param  \stdClass $schema Data structure
+     * @return int
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeInteger(\stdClass $schema)
@@ -109,8 +103,8 @@ class Faker
     /**
      * Create dummy floating number with JSON schema
      *
-     * @param                                       \stdClass $schema Data structure
-     * @return                                      ...
+     * @param  \stdClass $schema Data structure
+     * @return float
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeNumber(\stdClass $schema)
@@ -123,10 +117,8 @@ class Faker
     }
 
     /**
-     *
-     *
      * @param \stdClass $schema Data structure
-     * @return ...
+     * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeString(\stdClass $schema)
@@ -149,10 +141,8 @@ class Faker
     }
 
     /**
-     *
-     *
      * @param \stdClass $schema Data structure
-     * @return ...
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeArray(\stdClass $schema)
@@ -184,8 +174,8 @@ class Faker
      * TODO: Support patternProperties
      * TODO: Support dependencies
      *
-     * @param                                       \stdClass $schema Data structure
-     * @return                                      ...
+     * @param  \stdClass $schema Data structure
+     * @return \stdClass
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeObject(\stdClass $schema)
