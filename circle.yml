@@ -8,6 +8,8 @@ dependencies:
   override:
     - ./composer.phar update
   post:
+    - phpenv versions
+    - ls /opt/circleci/php
     - sed -i 's/^;//' /opt/circleci/php/$(phpenv global)/etc/conf.d/xdebug.ini
 
 test:
