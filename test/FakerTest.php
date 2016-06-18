@@ -15,7 +15,7 @@ class FakerTest extends TestCase
         $actual = Faker::fake($schema);
         $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->isValid());
+        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors()));
     }
 
     public function testFakeNumberMustReturnValidValue()
@@ -26,7 +26,7 @@ class FakerTest extends TestCase
         $actual = Faker::fake($schema);
         $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->isValid());
+        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors()));
     }
 
     public function testFakeStringMustReturnValidValue()
@@ -37,7 +37,7 @@ class FakerTest extends TestCase
         $actual = Faker::fake($schema);
         $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->isValid());
+        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors()));
     }
 
     public function testFakeArrayMustReturnValidValue()
@@ -48,7 +48,7 @@ class FakerTest extends TestCase
         $actual = Faker::fake($schema);
         $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->isValid());
+        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors()));
     }
 
     /**
