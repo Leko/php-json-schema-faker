@@ -1,0 +1,12 @@
+machine:
+  php:
+    version: 7.0.4
+
+dependencies:
+  override:
+    - ./composer.phar install
+
+test:
+  override:
+    - ./composer.phar run lint
+    - ./composer.phar run test
