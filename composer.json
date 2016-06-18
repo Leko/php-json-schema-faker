@@ -33,7 +33,7 @@
     },
     "scripts": {
         "test": [
-            "phpunit test/ --coverage-clover=clover.xml"
+            "phpunit test/ --coverage-clover=clover.xml --whitelist=src"
         ],
         "lint": [
             "phpmd src,test text codesize,controversial,design,naming,unusedcode",
