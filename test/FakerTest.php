@@ -2,6 +2,7 @@
 
 namespace JSONSchemaFaker\Test;
 
+use JSONSchemaFaker\Faker;
 use JsonSchema\Validator;
 
 class FakerTest extends TestCase
@@ -11,9 +12,10 @@ class FakerTest extends TestCase
         $schema = $this->getFixture('integer');
         $validator = new Validator();
 
-        $actual = $this->callInternalMethod(new Faker(), 'fake', [$schema]);
+        $actual = Faker::fake($schema);
+        $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->check($actual, $schema));
+        $this->assertTrue($validator->isValid());
     }
 
     public function testFakeNumberMustReturnValidValue()
@@ -21,9 +23,10 @@ class FakerTest extends TestCase
         $schema = $this->getFixture('number');
         $validator = new Validator();
 
-        $actual = $this->callInternalMethod(new Faker(), 'fake', [$schema]);
+        $actual = Faker::fake($schema);
+        $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->check($actual, $schema));
+        $this->assertTrue($validator->isValid());
     }
 
     public function testFakeStringMustReturnValidValue()
@@ -31,9 +34,10 @@ class FakerTest extends TestCase
         $schema = $this->getFixture('string');
         $validator = new Validator();
 
-        $actual = $this->callInternalMethod(new Faker(), 'fake', [$schema]);
+        $actual = Faker::fake($schema);
+        $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->check($actual, $schema));
+        $this->assertTrue($validator->isValid());
     }
 
     public function testFakeArrayMustReturnValidValue()
@@ -41,9 +45,10 @@ class FakerTest extends TestCase
         $schema = $this->getFixture('array');
         $validator = new Validator();
 
-        $actual = $this->callInternalMethod(new Faker(), 'fake', [$schema]);
+        $actual = Faker::fake($schema);
+        $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->check($actual, $schema));
+        $this->assertTrue($validator->isValid());
     }
 
     /**
@@ -51,6 +56,6 @@ class FakerTest extends TestCase
      */
     public function testFakeMustThrowExceptionIfInvalidType()
     {
-        \JSONSchemaFaker\fake((object)['type' => 'xxxxx']);
+        Faker::fake((object)['type' => 'xxxxx']);
     }
 }

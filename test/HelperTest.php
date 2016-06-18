@@ -42,7 +42,7 @@ class HelperTest extends TestCase
         $actual = \JSONSchemaFaker\getMaximum($schema);
 
         // -1 mean exclusive
-        $this->assertSame($actual - 1);
+        $this->assertSame($actual, $maximum - 1);
     }
 
     public function testGetMaximumMustReturnMaximumIfExclusiveMaximumFalse()
@@ -73,7 +73,7 @@ class HelperTest extends TestCase
         $actual = \JSONSchemaFaker\getMinimum($schema);
 
         // +1 mean exclusive
-        $this->assertSame($actual + 1);
+        $this->assertSame($actual, $minimum + 1);
     }
 
     public function testGetMinimumMustReturnMinimumIfExclusiveMinimumFalse()
@@ -131,9 +131,10 @@ class HelperTest extends TestCase
         $schema = (object)['type' => 'string', 'format' => $format];
         $validator = new Validator();
 
-        $actual = \JSONSchemaFaker\getInternetFakerInstance($schema);
+        $actual = \JSONSchemaFaker\getFormattedValue($schema);
+        $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->check($actual, $schema));
+        $this->assertTrue($validator->isValid());
     }
 
     /**
@@ -156,7 +157,7 @@ class HelperTest extends TestCase
      * @see testGetFormattedValueMustReturnValidValue
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function getFormats()
+    public function getFormats()
     {
         return [
             ['date-time'],

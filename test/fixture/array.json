@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "typeOnly": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "typeAndMultipleItems": {
+      "type": "array",
+      "items": [{
+        "type": "integer"
+      }, {
+        "type": "string"
+      }]
+    }
+  }
+}

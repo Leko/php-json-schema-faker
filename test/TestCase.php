@@ -2,12 +2,11 @@
 
 namespace JSONSchemaFaker\Test;
 
-use PHPUnit\Framework\TestCase;
 use JsonSchema\RefResolver;
 use JsonSchema\Uri\UriRetriever;
 use JsonSchema\Uri\UriResolver;
 
-class TestCase extends TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected function getFixture($name)
     {

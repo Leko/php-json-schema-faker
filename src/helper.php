@@ -7,6 +7,7 @@
 
 namespace JSONSchemaFaker;
 
+use Faker\Factory;
 use Faker\Provider\Base;
 use Faker\Provider\DateTime;
 use Faker\Provider\Internet;
@@ -14,7 +15,7 @@ use Faker\Provider\Internet;
 /**
  * Get value without E_NOTICE
  *
- * @param  object $obj     Target
+ * @param  \stdClass $obj     Target
  * @param  string $prop    Property name
  * @param  mixed  $default Value if $obj->{$prop} does not exist
  * @return mixed property value or default value
@@ -27,7 +28,7 @@ function get($obj, $prop, $default = null)
 /**
  * Get maximum number
  *
- * @param  object $schema Data structure
+ * @param  \stdClass $schema Data structure
  * @return int maximum number
  */
 function getMaximum($schema)
@@ -39,7 +40,7 @@ function getMaximum($schema)
 /**
  *
  *
- * @param object $schema Data structure
+ * @param \stdClass $schema Data structure
  * @return ...
  */
 function getMinimum($schema)
@@ -51,7 +52,7 @@ function getMinimum($schema)
 /**
  *
  *
- * @param object $schema Data structure
+ * @param \stdClass $schema Data structure
  * @return ...
  */
 function getMultipleOf($schema)
@@ -67,7 +68,7 @@ function getInternetFakerInstance()
 /**
  *
  *
- * @param object $schema Data structure
+ * @param \stdClass $schema Data structure
  * @return ...
  */
 function getFormattedValue($schema)
@@ -92,14 +93,14 @@ function getFormattedValue($schema)
         case 'uri':
             return getInternetFakerInstance()->url();
         default:
-            throw new Exception("Unsupported type: {$schema->format}");
+            throw new \Exception("Unsupported type: {$schema->format}");
     }
 }
 
 /**
  *
  */
-function getItems(object $schema)
+function getItems(\stdClass $schema)
 {
     $possibleItems = is_object($schema->items) ? [$schema->items] : $schema->items;
     $minItems = get($schema, 'minItems', 1);
@@ -112,7 +113,7 @@ function getItems(object $schema)
  *
  * @return string[] Property names
  */
-function getProperties(object $schema)
+function getProperties(\stdClass $schema)
 {
     $requiredKeys = get($schema, 'required', []);
     $optionalKeys = array_keys((array)$schema->properties);

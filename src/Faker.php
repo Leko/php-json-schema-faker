@@ -22,10 +22,10 @@ class Faker
      * Create dummy data with JSON schema
      *
      * @see    http://json-schema.org
-     * @param  object $schema Data structure writen in JSON Schema
+     * @param  \stdClass $schema Data structure writen in JSON Schema
      * @return mixed dummy data
      */
-    public static function fake(object $schema)
+    public static function fake(\stdClass $schema)
     {
         $faker = new static();
         return $faker->generate($schema);
@@ -34,11 +34,11 @@ class Faker
     /**
      * Create dummy data with JSON schema
      *
-     * @param  object $schema Data structure writen in JSON Schema
+     * @param  \stdClass $schema Data structure writen in JSON Schema
      * @return mixed dummy data
-     * @throws Exception Throw when unsupported type specified
+     * @throws \Exception Throw when unsupported type specified
      */
-    public function generate(object $schema)
+    public function generate(\stdClass $schema)
     {
         $fakers = $this->getFakers();
 
@@ -49,7 +49,7 @@ class Faker
         }
 
         if (!isset($fakers[$type])) {
-            throw new Exception("Unsupported type: {$type}");
+            throw new \Exception("Unsupported type: {$type}");
         }
 
         return $fakers[$type]($schema);
@@ -93,11 +93,11 @@ class Faker
     /**
      * Create dummy integer with JSON schema
      *
-     * @param                                       object $schema Data structure
+     * @param                                       \stdClass $schema Data structure
      * @return                                      ...
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function fakeInteger(object $schema)
+    private function fakeInteger(\stdClass $schema)
     {
         $minimum = getMinimum($schema);
         $maximum = getMaximum($schema);
@@ -109,11 +109,11 @@ class Faker
     /**
      * Create dummy floating number with JSON schema
      *
-     * @param                                       object $schema Data structure
+     * @param                                       \stdClass $schema Data structure
      * @return                                      ...
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function fakeNumber(object $schema)
+    private function fakeNumber(\stdClass $schema)
     {
         $minimum = getMinimum($schema);
         $maximum = getMaximum($schema);
@@ -125,11 +125,11 @@ class Faker
     /**
      *
      *
-     * @param object $schema Data structure
+     * @param \stdClass $schema Data structure
      * @return ...
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function fakeString(object $schema)
+    private function fakeString(\stdClass $schema)
     {
         if (isset($schema->format)) {
             return getFormattedValue($schema);
@@ -143,11 +143,11 @@ class Faker
     /**
      *
      *
-     * @param object $schema Data structure
+     * @param \stdClass $schema Data structure
      * @return ...
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function fakeArray(object $schema)
+    private function fakeArray(\stdClass $schema)
     {
         $dummies = [];
         foreach (getItems($schema) as $subschema) {
@@ -162,11 +162,11 @@ class Faker
      * TODO: Support patternProperties
      * TODO: Support dependencies
      *
-     * @param                                       object $schema Data structure
+     * @param                                       \stdClass $schema Data structure
      * @return                                      ...
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function fakeObject(object $schema)
+    private function fakeObject(\stdClass $schema)
     {
         $dummy = new \stdClass();
         foreach (getProperties($schema) as $key) {
