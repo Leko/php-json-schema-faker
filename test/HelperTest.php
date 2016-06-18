@@ -145,10 +145,6 @@ class HelperTest extends TestCase
         \JSONSchemaFaker\getFormattedValue((object)['format' => 'xxxxx']);
     }
 
-    public function testGetItemsMust()
-    {
-    }
-
     public function testGetPropertiesMust()
     {
     }

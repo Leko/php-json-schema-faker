@@ -10,12 +10,6 @@ namespace JSONSchemaFaker;
 use Faker\Provider\Base;
 use Faker\Provider\Lorem;
 
-/**
- * ## Example
- * ```php
- * $dummy = Faker::fake($schema);
- * ```
- */
 class Faker
 {
     /**
@@ -40,6 +34,7 @@ class Faker
      */
     public function generate(\stdClass $schema)
     {
+        $schema = resolveOf($schema);
         $fakers = $this->getFakers();
 
         $type = is_array($schema->type) ? Base::randomElement($schema->type) : $schema->type;
@@ -71,7 +66,7 @@ class Faker
     /**
      * Create null
      *
-     * @return                                      null
+     * @return null
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeNull()
@@ -82,7 +77,7 @@ class Faker
     /**
      * Create dummy boolean with JSON schema
      *
-     * @return                                      boolean true or false
+     * @return bool true or false
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeBoolean()
@@ -93,8 +88,8 @@ class Faker
     /**
      * Create dummy integer with JSON schema
      *
-     * @param                                       \stdClass $schema Data structure
-     * @return                                      ...
+     * @param  \stdClass $schema Data structure
+     * @return int
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeInteger(\stdClass $schema)
@@ -109,8 +104,8 @@ class Faker
     /**
      * Create dummy floating number with JSON schema
      *
-     * @param                                       \stdClass $schema Data structure
-     * @return                                      ...
+     * @param  \stdClass $schema Data structure
+     * @return float
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeNumber(\stdClass $schema)
@@ -123,10 +118,8 @@ class Faker
     }
 
     /**
-     *
-     *
      * @param \stdClass $schema Data structure
-     * @return ...
+     * @return string
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeString(\stdClass $schema)
@@ -149,16 +142,14 @@ class Faker
     }
 
     /**
-     *
-     *
      * @param \stdClass $schema Data structure
-     * @return ...
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeArray(\stdClass $schema)
     {
         if (!isset($schema->items)) {
-            $subschemas = [(object)['type' => Base::randomElement(array_keys($this->getFakers()))]];
+            $subschemas = [$this->getRandomSchema()];
         // List
         } elseif (is_object($schema->items)) {
             $subschemas = [$schema->items];
@@ -180,22 +171,35 @@ class Faker
     }
 
     /**
-     * TODO: Support additionalProperties = true
-     * TODO: Support patternProperties
-     * TODO: Support dependencies
-     *
-     * @param                                       \stdClass $schema Data structure
-     * @return                                      ...
+     * @param  \stdClass $schema Data structure
+     * @return \stdClass
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function fakeObject(\stdClass $schema)
     {
+        $properties = get($schema, 'properties', new \stdClass());
+        $propertyNames = getProperties($schema);
+
         $dummy = new \stdClass();
-        foreach (getProperties($schema) as $key) {
-            $subschema = $schema->properties->{$key};
+        foreach ($propertyNames as $key) {
+            if (isset($properties->{$key})) {
+                $subschema = $properties->{$key};
+            } else {
+                $subschema = getAdditionalPropertySchema($schema, $key) ?: $this->getRandomSchema();
+            }
+
             $dummy->{$key} = $this->generate($subschema);
         }
 
         return $dummy;
+    }
+
+    private function getRandomSchema()
+    {
+        $fakerNames = array_keys($this->getFakers());
+
+        return (object)[
+            'type' => Base::randomElement($fakerNames)
+        ];
     }
 }

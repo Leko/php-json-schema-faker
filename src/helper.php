@@ -9,6 +9,7 @@ namespace JSONSchemaFaker;
 
 use Faker\Factory;
 use Faker\Provider\Base;
+use Faker\Provider\Lorem;
 use Faker\Provider\DateTime;
 use Faker\Provider\Internet;
 
@@ -23,6 +24,31 @@ use Faker\Provider\Internet;
 function get($obj, $prop, $default = null)
 {
     return isset($obj->{$prop}) ? $obj->{$prop} : $default;
+}
+
+function mergeObject()
+{
+    $merged = [];
+    $objList = func_get_args();
+
+    foreach ($objList as $obj) {
+        $merged = array_merge($merged, (array)$obj);
+    }
+
+    return (object)$merged;
+}
+
+function resolveOf(\stdClass $schema)
+{
+    if (isset($schema->allOf)) {
+        return call_user_func_array(__NAMESPACE__.'\mergeObject', $schema->allOf);
+    } elseif (isset($schema->anyOf)) {
+        return call_user_func_array(__NAMESPACE__.'\mergeObject', Base::randomElements($schema->anyOf));
+    } elseif (isset($schema->oneOf)) {
+        return Base::randomElement($schema->oneOf);
+    } else {
+        return $schema;
+    }
 }
 
 /**
@@ -97,29 +123,55 @@ function getFormattedValue($schema)
     }
 }
 
-/**
- *
- */
-function getItems(\stdClass $schema)
+function resolveDependencies(\stdClass $schema, array $keys)
 {
-    $possibleItems = is_object($schema->items) ? [$schema->items] : $schema->items;
-    $minItems = get($schema, 'minItems', 1);
-    $maxItems = get($schema, 'maxItems', count($possibleItems));
+    $resolved = [];
+    $dependencies = get($schema, 'dependencies', new \stdClass());
 
-    return Base::randomElements($possibleItems, Base::numberBetween($minItems, $maxItems));
+    foreach ($keys as $key) {
+        $resolved = array_merge($resolved, [$key], get($dependencies, $key, []));
+    }
+
+    return $resolved;
 }
 
 /**
- *
  * @return string[] Property names
  */
 function getProperties(\stdClass $schema)
 {
     $requiredKeys = get($schema, 'required', []);
-    $optionalKeys = array_keys((array)$schema->properties);
-    $minProperties = get($schema, 'minProperties', 0);
+    $optionalKeys = array_keys((array)get($schema, 'properties', new \stdClass()));
     $maxProperties = get($schema, 'maxProperties', count($optionalKeys) - count($requiredKeys));
-    $additionalKeys = Base::randomElements($optionalKeys, Base::numberBetween($minProperties, $maxProperties));
+    $pickSize = Base::numberBetween(0, min(count($optionalKeys), $maxProperties));
+    $additionalKeys = resolveDependencies($schema, Base::randomElements($optionalKeys, $pickSize));
+    $propertyNames = array_unique(array_merge($requiredKeys, $additionalKeys));
 
-    return array_unique(array_merge($requiredKeys, $additionalKeys));
+    $additionalProperties = get($schema, 'additionalProperties', true);
+    $patternProperties = get($schema, 'patternProperties', new \stdClass());
+    $patterns = array_keys((array)$patternProperties);
+    while (count($propertyNames) < get($schema, 'minProperties', 0)) {
+        $name = $additionalProperties ? Lorem::word() : Lorem::regexify(Base::randomElement($patterns));
+        if (!in_array($name, $propertyNames)) {
+            $propertyNames[] = $name;
+        }
+    }
+
+    return $propertyNames;
+}
+
+function getAdditionalPropertySchema(\stdClass $schema, $property)
+{
+    $patternProperties = get($schema, 'patternProperties', new \stdClass());
+    $additionalProperties = get($schema, 'additionalProperties', true);
+
+    foreach ($patternProperties as $pattern => $sub) {
+        if (preg_match("/{$pattern}/", $property)) {
+            return $sub;
+        }
+    }
+
+    if (is_object($additionalProperties)) {
+        return $additionalProperties;
+    }
 }
