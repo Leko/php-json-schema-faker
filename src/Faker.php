@@ -149,8 +149,21 @@ class Faker
      */
     private function fakeArray(\stdClass $schema)
     {
+        if (!isset($schema->items)) {
+            $subschemas = [(object)['type' => Base::randomElement(array_keys($this->getFakers()))]];
+        // List
+        } elseif (is_object($schema->items)) {
+            $subschemas = [$schema->items];
+        // Tuple
+        } elseif (is_array($schema->items)) {
+            $subschemas = $schema->items;
+        } else {
+            throw new \Exception("Invalid items");
+        }
+
         $dummies = [];
-        foreach (getItems($schema) as $subschema) {
+        $itemSize = Base::numberBetween(get($schema, 'minItems', 0), get($schema, 'maxItems', count($subschemas)));
+        foreach (array_slice($subschemas, 0, $itemSize) as $subschema) {
             $dummies[] = $this->generate($subschema);
         }
 
