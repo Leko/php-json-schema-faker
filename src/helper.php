@@ -99,18 +99,6 @@ function getFormattedValue($schema)
 
 /**
  *
- */
-function getItems(\stdClass $schema)
-{
-    $possibleItems = is_object($schema->items) ? [$schema->items] : $schema->items;
-    $minItems = get($schema, 'minItems', 1);
-    $maxItems = get($schema, 'maxItems', count($possibleItems));
-
-    return Base::randomElements($possibleItems, Base::numberBetween($minItems, $maxItems));
-}
-
-/**
- *
  * @return string[] Property names
  */
 function getProperties(\stdClass $schema)
