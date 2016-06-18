@@ -26,7 +26,7 @@ function get($obj, $prop, $default = null)
     return isset($obj->{$prop}) ? $obj->{$prop} : $default;
 }
 
-function mergeObject(/* \stdClass ...$objList */)
+function mergeObject()
 {
     $merged = [];
     $objList = func_get_args();
@@ -147,7 +147,7 @@ function getProperties(\stdClass $schema)
     $additionalKeys = resolveDependencies($schema, Base::randomElements($optionalKeys, $pickSize));
     $propertyNames = array_unique(array_merge($requiredKeys, $additionalKeys));
 
-    $additionalProperties = get($schema, 'additionalProperties', false);
+    $additionalProperties = get($schema, 'additionalProperties', true);
     $patternProperties = get($schema, 'patternProperties', new \stdClass());
     $patterns = array_keys((array)$patternProperties);
     while (count($propertyNames) < get($schema, 'minProperties', 0)) {
@@ -160,7 +160,7 @@ function getProperties(\stdClass $schema)
 function getAdditionalPropertySchema(\stdClass $schema, $property)
 {
     $patternProperties = get($schema, 'patternProperties', new \stdClass());
-    $additionalProperties = get($schema, 'additionalProperties', false);
+    $additionalProperties = get($schema, 'additionalProperties', true);
 
     foreach ($patternProperties as $pattern => $sub) {
         if (preg_match("/{$pattern}/", $property)) {
