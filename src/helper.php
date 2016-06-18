@@ -151,7 +151,10 @@ function getProperties(\stdClass $schema)
     $patternProperties = get($schema, 'patternProperties', new \stdClass());
     $patterns = array_keys((array)$patternProperties);
     while (count($propertyNames) < get($schema, 'minProperties', 0)) {
-        $propertyNames[] = $additionalProperties ? Lorem::regexify(Base::randomElement($patterns)) : Lorem::word();
+        $name = $additionalProperties ? Lorem::word() : Lorem::regexify(Base::randomElement($patterns));
+        if (in_array($name, $propertyNames)) continue;
+
+        $propertyNames[] = $name;
     }
 
     return $propertyNames;
