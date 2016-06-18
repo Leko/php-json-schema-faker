@@ -6,10 +6,20 @@
   ],
   "properties": {
     "typeOnly": {
+      "type": "array"
+    },
+    "typeAndMinItems": {
       "type": "array",
-      "items": {
-        "type": "integer"
-      }
+      "minItems": 10
+    },
+    "typeAndMaxItems": {
+      "type": "array",
+      "maxItems": 10
+    },
+    "typeAndMinItems": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10
     },
     "typeAndMultipleItems": {
       "type": "array",
