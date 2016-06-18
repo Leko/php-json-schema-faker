@@ -148,7 +148,7 @@ class Faker
     private function fakeArray(\stdClass $schema)
     {
         if (!isset($schema->items)) {
-            $subschemas = [(object)['type' => Base::randomElement(array_keys($this->getFakers()))]];
+            $subschemas = [$this->getRandomSchema()];
         // List
         } elseif (is_object($schema->items)) {
             $subschemas = [$schema->items];
@@ -170,10 +170,6 @@ class Faker
     }
 
     /**
-     * TODO: Support additionalProperties = true
-     * TODO: Support patternProperties
-     * TODO: Support dependencies
-     *
      * @param  \stdClass $schema Data structure
      * @return \stdClass
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
@@ -181,11 +177,35 @@ class Faker
     private function fakeObject(\stdClass $schema)
     {
         $dummy = new \stdClass();
-        foreach (getProperties($schema) as $key) {
-            $subschema = $schema->properties->{$key};
+        $propertyNames = getProperties($schema);
+
+        $additionalProperties = get($schema, 'additionalProperties', false);
+        $patternProperties = get($schema, 'patternProperties', '//');
+        while (count($propertyNames) < get($schema, 'minProperties', 0)) {
+            $propertyNames[] = $additionalProperties ? Lorem::regexify($patternProperties) : Lorem::word();
+        }
+
+        foreach ($propertyNames as $key) {
+            if (isset($schema->properties->{$key})) {
+                $subschema = $schema->properties->{$key};
+            } elseif (is_object($additionalProperties)) {
+                $subschema = $additionalProperties;
+            } else {
+                $subschema = $this->getRandomSchema();
+            }
+
             $dummy->{$key} = $this->generate($subschema);
         }
 
         return $dummy;
+    }
+
+    private function getRandomSchema()
+    {
+        $fakerNames = array_keys($this->getFakers());
+
+        return (object)[
+            'type' => Base::randomElement($fakerNames)
+        ];
     }
 }

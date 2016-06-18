@@ -97,17 +97,29 @@ function getFormattedValue($schema)
     }
 }
 
+function resolveDependencies(\stdClass $schema, array $keys)
+{
+    $resolved = [];
+    $dependencies = get($schema, 'dependencies', new \stdClass());
+
+    foreach ($keys as $key) {
+        $resolved = array_merge($resolved, [$key], get($dependencies, $key, []));
+    }
+
+    return $resolved;
+}
+
 /**
- *
  * @return string[] Property names
  */
 function getProperties(\stdClass $schema)
 {
     $requiredKeys = get($schema, 'required', []);
-    $optionalKeys = array_keys((array)$schema->properties);
+    $optionalKeys = array_keys((array)get($schema, 'properties', new \stdClass()));
     $minProperties = get($schema, 'minProperties', 0);
     $maxProperties = get($schema, 'maxProperties', count($optionalKeys) - count($requiredKeys));
-    $additionalKeys = Base::randomElements($optionalKeys, Base::numberBetween($minProperties, $maxProperties));
+    $pickSize = Base::numberBetween($minProperties, $maxProperties);
+    $additionalKeys = resolveDependencies($schema, Base::randomElements($optionalKeys, $pickSize));
 
     return array_unique(array_merge($requiredKeys, $additionalKeys));
 }
