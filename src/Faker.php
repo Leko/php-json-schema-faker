@@ -180,18 +180,28 @@ class Faker
         $propertyNames = getProperties($schema);
 
         $additionalProperties = get($schema, 'additionalProperties', false);
-        $patternProperties = get($schema, 'patternProperties', '//');
+        $patternProperties = get($schema, 'patternProperties', new \stdClass());
+        $patterns = array_keys((array)$patternProperties);
         while (count($propertyNames) < get($schema, 'minProperties', 0)) {
-            $propertyNames[] = $additionalProperties ? Lorem::regexify($patternProperties) : Lorem::word();
+            $propertyNames[] = $additionalProperties ? Lorem::regexify(Base::randomElement($patterns)) : Lorem::word();
         }
 
         foreach ($propertyNames as $key) {
             if (isset($schema->properties->{$key})) {
                 $subschema = $schema->properties->{$key};
-            } elseif (is_object($additionalProperties)) {
-                $subschema = $additionalProperties;
             } else {
-                $subschema = $this->getRandomSchema();
+                foreach ($patterns as $pattern) {
+                    if (preg_match("/{$pattern}/", $key)) {
+                        $subschema = $patternProperties->{$pattern};
+                        break;
+                    }
+                }
+
+                if (is_null($subschema) && is_object($additionalProperties)) {
+                    $subschema = $additionalProperties;
+                } elseif(is_null($subschema)) {
+                    $subschema = $this->getRandomSchema();
+                }
             }
 
             $dummy->{$key} = $this->generate($subschema);

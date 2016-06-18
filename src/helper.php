@@ -116,9 +116,8 @@ function getProperties(\stdClass $schema)
 {
     $requiredKeys = get($schema, 'required', []);
     $optionalKeys = array_keys((array)get($schema, 'properties', new \stdClass()));
-    $minProperties = get($schema, 'minProperties', 0);
     $maxProperties = get($schema, 'maxProperties', count($optionalKeys) - count($requiredKeys));
-    $pickSize = Base::numberBetween($minProperties, $maxProperties);
+    $pickSize = Base::numberBetween(0, min(count($optionalKeys), $maxProperties));
     $additionalKeys = resolveDependencies($schema, Base::randomElements($optionalKeys, $pickSize));
 
     return array_unique(array_merge($requiredKeys, $additionalKeys));

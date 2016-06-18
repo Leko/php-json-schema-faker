@@ -7,48 +7,31 @@ use JsonSchema\Validator;
 
 class FakerTest extends TestCase
 {
-    public function testFakeIntegerMustReturnValidValue()
+    /**
+     * @dataProvider getTypes
+     */
+    public function testFakeMustReturnValidValue($type)
     {
-        $schema = $this->getFixture('integer');
+        $schema = $this->getFixture($type);
         $validator = new Validator();
 
         $actual = Faker::fake($schema);
         $validator->check($actual, $schema);
 
-        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors()));
+        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors(), JSON_PRETTY_PRINT));
     }
 
-    public function testFakeNumberMustReturnValidValue()
+    public function getTypes()
     {
-        $schema = $this->getFixture('number');
-        $validator = new Validator();
-
-        $actual = Faker::fake($schema);
-        $validator->check($actual, $schema);
-
-        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors()));
-    }
-
-    public function testFakeStringMustReturnValidValue()
-    {
-        $schema = $this->getFixture('string');
-        $validator = new Validator();
-
-        $actual = Faker::fake($schema);
-        $validator->check($actual, $schema);
-
-        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors()));
-    }
-
-    public function testFakeArrayMustReturnValidValue()
-    {
-        $schema = $this->getFixture('array');
-        $validator = new Validator();
-
-        $actual = Faker::fake($schema);
-        $validator->check($actual, $schema);
-
-        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors()));
+        return [
+            ['boolean'],
+            ['null'],
+            ['integer'],
+            ['number'],
+            ['string'],
+            ['array'],
+            ['object']
+        ];
     }
 
     /**
