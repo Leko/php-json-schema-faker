@@ -136,7 +136,15 @@ class Faker
         } elseif (isset($schema->pattern)) {
             return Lorem::regexify($schema->pattern);
         } else {
-            return Lorem::text(isset($schema->maxLength) ? $schema->maxLength : 200);
+            $min = get($schema, 'minLength', 1);
+            $max = get($schema, 'maxLength', max(5, $min + 1));
+            $lorem = Lorem::text($max);
+
+            if (mb_strlen($lorem) < $min) {
+                $lorem = str_repeat($lorem, $min);
+            }
+
+            return mb_substr($lorem, 0, $max);
         }
     }
 
@@ -164,7 +172,7 @@ class Faker
         $dummies = [];
         $itemSize = Base::numberBetween(get($schema, 'minItems', 0), get($schema, 'maxItems', count($subschemas)));
         $subschemas = array_slice($subschemas, 0, $itemSize);
-        for($i = 0; $i < $itemSize; $i++) {
+        for ($i = 0; $i < $itemSize; $i++) {
             $dummies[] = $this->generate($subschemas[$i % count($subschemas)]);
         }
 
