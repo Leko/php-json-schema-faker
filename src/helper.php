@@ -9,6 +9,7 @@ namespace JSONSchemaFaker;
 
 use Faker\Factory;
 use Faker\Provider\Base;
+use Faker\Provider\Lorem;
 use Faker\Provider\DateTime;
 use Faker\Provider\Internet;
 
@@ -119,6 +120,30 @@ function getProperties(\stdClass $schema)
     $maxProperties = get($schema, 'maxProperties', count($optionalKeys) - count($requiredKeys));
     $pickSize = Base::numberBetween(0, min(count($optionalKeys), $maxProperties));
     $additionalKeys = resolveDependencies($schema, Base::randomElements($optionalKeys, $pickSize));
+    $propertyNames = array_unique(array_merge($requiredKeys, $additionalKeys));
 
-    return array_unique(array_merge($requiredKeys, $additionalKeys));
+    $additionalProperties = get($schema, 'additionalProperties', false);
+    $patternProperties = get($schema, 'patternProperties', new \stdClass());
+    $patterns = array_keys((array)$patternProperties);
+    while (count($propertyNames) < get($schema, 'minProperties', 0)) {
+        $propertyNames[] = $additionalProperties ? Lorem::regexify(Base::randomElement($patterns)) : Lorem::word();
+    }
+
+    return $propertyNames;
+}
+
+function getAdditionalPropertySchema(\stdClass $schema, $property)
+{
+    $patternProperties = get($schema, 'patternProperties', new \stdClass());
+    $additionalProperties = get($schema, 'additionalProperties', false);
+
+    foreach ($patternProperties as $pattern => $sub) {
+        if (preg_match("/{$pattern}/", $property)) {
+            return $sub;
+        }
+    }
+
+    if (is_object($additionalProperties)) {
+        return $additionalProperties;
+    }
 }
