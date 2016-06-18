@@ -40,7 +40,6 @@ function mergeObject(/* \stdClass ...$objList */)
 
 function resolveOf(\stdClass $schema)
 {
-    $resolved = new \stdClass();
     if (isset($schema->allOf)) {
         return call_user_func_array(__NAMESPACE__.'\mergeObject', $schema->allOf);
     } elseif (isset($schema->anyOf)) {
