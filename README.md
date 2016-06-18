@@ -6,13 +6,13 @@ Inspire from [json-schema-faker](https://github.com/json-schema-faker/json-schem
 
 ## Getting started
 
-```
+```bash
 composer require leko/json-schema-faker
 ```
 
 If schema has references(`$ref`), please use with []().
 
-```
+```php
 <?php
 
 require_once 'PATH/TO/vendor/autoload.php';
