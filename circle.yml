@@ -7,6 +7,8 @@ dependencies:
     - ~/.composer/cache
   override:
     - ./composer.phar install
+  post:
+    - sed -i 's/^;//' /opt/circleci/php/$(phpenv global)/etc/conf.d/xdebug.ini
 
 test:
   override:
