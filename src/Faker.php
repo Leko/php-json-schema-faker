@@ -123,7 +123,7 @@ class Faker
     }
 
     /**
-     * 
+     *
      *
      * @param object $schema Data structure
      * @return ...
@@ -133,17 +133,15 @@ class Faker
     {
         if (isset($schema->format)) {
             return getFormattedValue($schema);
-
         } elseif (isset($schema->pattern)) {
             return Lorem::regexify($schema->pattern);
-
         } else {
             return Lorem::text(isset($schema->maxLength) ? $schema->maxLength : 200);
         }
     }
 
     /**
-     * 
+     *
      *
      * @param object $schema Data structure
      * @return ...

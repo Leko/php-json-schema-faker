@@ -37,7 +37,7 @@ function getMaximum($schema)
 }
 
 /**
- * 
+ *
  *
  * @param object $schema Data structure
  * @return ...
@@ -49,7 +49,7 @@ function getMinimum($schema)
 }
 
 /**
- * 
+ *
  *
  * @param object $schema Data structure
  * @return ...
@@ -65,7 +65,7 @@ function getInternetFakerInstance()
 }
 
 /**
- * 
+ *
  *
  * @param object $schema Data structure
  * @return ...
@@ -74,30 +74,25 @@ function getFormattedValue($schema)
 {
     switch ($schema->format) {
         // Date representation, as defined by RFC 3339, section 5.6.
-    case 'date-time':
-        return DateTime::dateTime()->format(DATE_RFC3339);
-
+        case 'date-time':
+            return DateTime::dateTime()->format(DATE_RFC3339);
         // Internet email address, see RFC 5322, section 3.4.1.
-    case 'email':
-        return getInternetFakerInstance()->safeEmail();
-
+        case 'email':
+            return getInternetFakerInstance()->safeEmail();
         // Internet host name, see RFC 1034, section 3.1.
-    case 'hostname':
-        return getInternetFakerInstance()->domainName();
-
+        case 'hostname':
+            return getInternetFakerInstance()->domainName();
         // IPv4 address, according to dotted-quad ABNF syntax as defined in RFC 2673, section 3.2.
-    case 'ipv4':
-        return getInternetFakerInstance()->ipv4();
-
+        case 'ipv4':
+            return getInternetFakerInstance()->ipv4();
         // IPv6 address, as defined in RFC 2373, section 2.2.
-    case 'ipv6':
-        return getInternetFakerInstance()->ipv6();
-
+        case 'ipv6':
+            return getInternetFakerInstance()->ipv6();
         // A universal resource identifier (URI), according to RFC3986.
-    case 'uri':
-        return getInternetFakerInstance()->url();
-    default:
-        throw new Exception("Unsupported type: {$schema->format}");
+        case 'uri':
+            return getInternetFakerInstance()->url();
+        default:
+            throw new Exception("Unsupported type: {$schema->format}");
     }
 }
 
