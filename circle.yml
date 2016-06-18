@@ -12,10 +12,6 @@ dependencies:
 
 test:
   override:
-    - phpenv global 5.5.21
-    - ./composer.phar run lint
-    - ./composer.phar run test
-    - phpenv global 7.0.4
     - ./composer.phar run lint
     - ./composer.phar run test
   post:
