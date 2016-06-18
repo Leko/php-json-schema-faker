@@ -26,6 +26,32 @@ function get($obj, $prop, $default = null)
     return isset($obj->{$prop}) ? $obj->{$prop} : $default;
 }
 
+function mergeObject(/* \stdClass ...$objList */)
+{
+    $merged = [];
+    $objList = func_get_args();
+
+    foreach ($objList as $obj) {
+        $merged = array_merge($merged, (array)$obj);
+    }
+
+    return (object)$merged;
+}
+
+function resolveOf(\stdClass $schema)
+{
+    $resolved = new \stdClass();
+    if (isset($schema->allOf)) {
+        return call_user_func_array(__NAMESPACE__.'\mergeObject', $schema->allOf);
+    } elseif (isset($schema->anyOf)) {
+        return call_user_func_array(__NAMESPACE__.'\mergeObject', Base::randomElements($schema->anyOf));
+    } elseif (isset($schema->oneOf)) {
+        return Base::randomElement($schema->oneOf);
+    } else {
+        return $schema;
+    }
+}
+
 /**
  * Get maximum number
  *

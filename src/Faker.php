@@ -34,6 +34,7 @@ class Faker
      */
     public function generate(\stdClass $schema)
     {
+        $schema = resolveOf($schema);
         $fakers = $this->getFakers();
 
         $type = is_array($schema->type) ? Base::randomElement($schema->type) : $schema->type;

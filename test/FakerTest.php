@@ -30,7 +30,8 @@ class FakerTest extends TestCase
             ['number'],
             ['string'],
             ['array'],
-            ['object']
+            ['object'],
+            ['combining']
         ];
     }
 
