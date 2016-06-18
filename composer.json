@@ -37,7 +37,7 @@
         ],
         "lint": [
             "phpmd src,test text codesize,controversial,design,naming,unusedcode",
-            "phpcs src test"
+            "phpcs --standard=PSR2 src test"
         ]
     }
 }
