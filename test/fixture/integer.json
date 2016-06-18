@@ -1,5 +1,15 @@
 {
   "type": "object",
+  "required": [
+    "typeOnly",
+    "typeAndEnum",
+    "typeAndMinimum",
+    "typeAndExcludeMinimum",
+    "typeAndMaximum",
+    "typeAndExcludeMinimum",
+    "typeAndMinimumAndMaximum",
+    "typeAndMultipleOf"
+  ],
   "properties": {
     "typeOnly": {
       "type": "integer"
