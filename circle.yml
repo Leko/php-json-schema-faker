@@ -10,3 +10,5 @@ test:
   override:
     - ./composer.phar run lint
     - ./composer.phar run test
+  post:
+    - curl -s https://codecov.io/bash
