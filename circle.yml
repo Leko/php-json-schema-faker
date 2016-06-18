@@ -11,4 +11,4 @@ test:
     - ./composer.phar run lint
     - ./composer.phar run test
   post:
-    - curl -s https://codecov.io/bash
+    - bash <(curl -s https://codecov.io/bash)
