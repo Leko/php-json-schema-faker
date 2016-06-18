@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "required": [
+    "typeOnly",
+    "typeAndMultipleItems"
+  ],
+  "properties": {
+    "typeOnly": {
+      "type": "array"
+    },
+    "typeAndMinItems": {
+      "type": "array",
+      "minItems": 10
+    },
+    "typeAndMaxItems": {
+      "type": "array",
+      "maxItems": 10
+    },
+    "typeAndMinItems": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10
+    },
+    "typeAndMultipleItems": {
+      "type": "array",
+      "items": [{
+        "type": "integer"
+      }, {
+        "type": "string"
+      }]
+    }
+  }
+}

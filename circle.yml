@@ -3,10 +3,16 @@ machine:
     version: 7.0.4
 
 dependencies:
+  cache_directories:
+    - ~/.composer/cache
   override:
-    - ./composer.phar install
+    - ./composer.phar update
+  post:
+    - sed -i 's/^;//' ~/.phpenv/versions/$(phpenv global)/etc/conf.d/xdebug.ini
 
 test:
   override:
     - ./composer.phar run lint
     - ./composer.phar run test
+  post:
+    - bash <(curl -s https://codecov.io/bash)

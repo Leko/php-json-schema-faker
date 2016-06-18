@@ -15,7 +15,8 @@
     "require-dev": {
         "justinrainbow/json-schema": "~2.0",
         "phpmd/phpmd": "^2.4",
-        "squizlabs/php_codesniffer": "^2.6"
+        "squizlabs/php_codesniffer": "^2.6",
+        "phpunit/phpunit": "^5.4"
     },
     "autoload": {
         "files": [
@@ -32,11 +33,11 @@
     },
     "scripts": {
         "test": [
-            "phpunit test/"
+            "phpunit test/ --coverage-clover=clover.xml --whitelist=src"
         ],
         "lint": [
             "phpmd src,test text codesize,controversial,design,naming,unusedcode",
-            "phpcs src test"
+            "phpcs --standard=PSR2 src test"
         ]
     }
 }
