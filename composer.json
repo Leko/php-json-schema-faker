@@ -10,16 +10,24 @@
         }
     ],
     "require": {
-        "fzaninotto/faker": "^1.6",
-        "justinrainbow/json-schema": "~2.0"
+        "fzaninotto/faker": "^1.6"
+    },
+    "require-dev": {
+        "justinrainbow/json-schema": "~2.0",
+        "phpmd/phpmd": "^2.4",
+        "squizlabs/php_codesniffer": "^2.6"
     },
     "autoload": {
         "files": [
-            "./src/helper.php",
-            "./src/fake.php"
+            "./src/helper.php"
         ],
         "psr-4": {
             "JSONSchemaFaker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JSONSchemaFaker\\Test\\": "test/"
         }
     },
     "scripts": {
@@ -27,8 +35,8 @@
             "phpunit test/"
         ],
         "lint": [
-            "phpmd src/ test/",
-            "phpcbs src/ test/"
+            "phpmd src,test text codesize,controversial,design,naming,unusedcode",
+            "phpcs src test"
         ]
     }
 }
