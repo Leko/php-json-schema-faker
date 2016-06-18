@@ -15,7 +15,8 @@
     "require-dev": {
         "justinrainbow/json-schema": "~2.0",
         "phpmd/phpmd": "^2.4",
-        "squizlabs/php_codesniffer": "^2.6"
+        "squizlabs/php_codesniffer": "^2.6",
+        "phpunit/phpunit": "^5.4"
     },
     "autoload": {
         "files": [
