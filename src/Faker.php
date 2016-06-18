@@ -163,8 +163,9 @@ class Faker
 
         $dummies = [];
         $itemSize = Base::numberBetween(get($schema, 'minItems', 0), get($schema, 'maxItems', count($subschemas)));
-        foreach (array_slice($subschemas, 0, $itemSize) as $subschema) {
-            $dummies[] = $this->generate($subschema);
+        $subschemas = array_slice($subschemas, 0, $itemSize);
+        for($i = 0; $i < $itemSize; $i++) {
+            $dummies[] = $this->generate($subschemas[$i % count($subschemas)]);
         }
 
         return get($schema, 'uniqueItems', false) ? array_unique($dummies) : $dummies;
