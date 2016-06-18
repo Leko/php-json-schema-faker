@@ -3,6 +3,8 @@ machine:
     version: 7.0.4
 
 dependencies:
+  cache_directories:
+    - ~/.composer/cache
   override:
     - ./composer.phar install
 
