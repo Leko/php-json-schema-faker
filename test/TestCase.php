@@ -2,16 +2,11 @@
 
 namespace JSONSchemaFaker\Test;
 
-use JsonSchema\RefResolver;
-use JsonSchema\Uri\UriRetriever;
-use JsonSchema\Uri\UriResolver;
-
 class TestCase extends \PHPUnit\Framework\TestCase
 {
     protected function getFixture($name)
     {
-        $refResolver = new RefResolver(new UriRetriever(), new UriResolver());
-        return $refResolver->resolve('file://' . __DIR__ . "/fixture/{$name}.json");
+        return json_decode(file_get_contents(__DIR__ . "/fixture/{$name}.json"));
     }
 
     protected function callInternalMethod($instance, $method, array $args = [])
