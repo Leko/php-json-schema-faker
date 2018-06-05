@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "fzaninotto/faker": "^1.6"
+        "fzaninotto/faker": "^1.7"
     },
     "require-dev": {
         "justinrainbow/json-schema": "~2.0",
