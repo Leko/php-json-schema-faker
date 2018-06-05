@@ -2,9 +2,6 @@
 
 namespace JSONSchemaFaker\Test;
 
-use JsonSchema\RefResolver;
-use JsonSchema\Uri\UriRetriever;
-use JsonSchema\Uri\UriResolver;
 use JsonSchema\Validator;
 
 /**
