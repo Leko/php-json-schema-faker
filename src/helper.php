@@ -38,9 +38,17 @@ function mergeObject()
     return (object)$merged;
 }
 
-function resolveOf(\stdClass $schema)
+function resolveOf(\stdClass $schema, \stdClass $rootSchema)
 {
-    if (isset($schema->allOf)) {
+    if (isset($schema->{'$ref'})) {
+        $parts = explode('/', $schema->{'$ref'});
+        array_shift($parts);
+        $value = $rootSchema;
+        foreach ($parts as $part) {
+            $value = $value->{$part};
+        }
+        return $value;
+    } elseif (isset($schema->allOf)) {
         return call_user_func_array(__NAMESPACE__.'\mergeObject', $schema->allOf);
     } elseif (isset($schema->anyOf)) {
         return call_user_func_array(__NAMESPACE__.'\mergeObject', Base::randomElements($schema->anyOf));

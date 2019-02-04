@@ -32,12 +32,18 @@ class Faker
      * @return mixed dummy data
      * @throws \Exception Throw when unsupported type specified
      */
-    public function generate(\stdClass $schema)
+    public function generate(\stdClass $schema, \stdClass $rootSchema = null)
     {
-        $schema = resolveOf($schema);
+        if ($rootSchema === null) {
+            $rootSchema = $schema;
+        }
+
+        $schema = resolveOf($schema, $rootSchema);
         $fakers = $this->getFakers();
 
-        $type = is_array($schema->type) ? Base::randomElement($schema->type) : $schema->type;
+        $type = is_array($schema->type)
+            ? Base::randomElement($schema->type)
+            : $schema->type;
 
         if (isset($schema->enum)) {
             return Base::randomElement($schema->enum);
@@ -47,7 +53,7 @@ class Faker
             throw new \Exception("Unsupported type: {$type}");
         }
 
-        return $fakers[$type]($schema);
+        return $fakers[$type]($schema, $rootSchema);
     }
 
     private function getFakers()
@@ -146,7 +152,7 @@ class Faker
      * @return array
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function fakeArray(\stdClass $schema)
+    private function fakeArray(\stdClass $schema, \stdClass $rootSchema)
     {
         if (!isset($schema->items)) {
             $subschemas = [$this->getRandomSchema()];
@@ -164,7 +170,7 @@ class Faker
         $itemSize = Base::numberBetween(get($schema, 'minItems', 0), get($schema, 'maxItems', count($subschemas)));
         $subschemas = array_slice($subschemas, 0, $itemSize);
         for ($i = 0; $i < $itemSize; $i++) {
-            $dummies[] = $this->generate($subschemas[$i % count($subschemas)]);
+            $dummies[] = $this->generate($subschemas[$i % count($subschemas)], $rootSchema);
         }
 
         return get($schema, 'uniqueItems', false) ? array_unique($dummies) : $dummies;
@@ -175,7 +181,7 @@ class Faker
      * @return \stdClass
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function fakeObject(\stdClass $schema)
+    private function fakeObject(\stdClass $schema, \stdClass $rootSchema)
     {
         $properties = get($schema, 'properties', new \stdClass());
         $propertyNames = getProperties($schema);
@@ -188,7 +194,7 @@ class Faker
                 $subschema = getAdditionalPropertySchema($schema, $key) ?: $this->getRandomSchema();
             }
 
-            $dummy->{$key} = $this->generate($subschema);
+            $dummy->{$key} = $this->generate($subschema, $rootSchema);
         }
 
         return $dummy;
