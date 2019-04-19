@@ -13,6 +13,16 @@ use Faker\Provider\Lorem;
 class Faker
 {
     /**
+     * @var string
+     */
+    private $schemaDir;
+
+    public function __construct(string $schemaDir = '')
+    {
+        $this->schemaDir = $schemaDir;
+    }
+
+    /**
      * Create dummy data with JSON schema
      *
      * @see    http://json-schema.org
@@ -32,11 +42,14 @@ class Faker
      * @return mixed dummy data
      * @throws \Exception Throw when unsupported type specified
      */
-    public function generate(\stdClass $schema)
+    public function generate(\stdClass $schema, \stdClass $parentSchems = null)
     {
         $schema = resolveOf($schema);
         $fakers = $this->getFakers();
 
+        if (property_exists($schema, '$ref')) {
+            return $this->ref($schema, $parentSchems);
+        }
         $type = is_array($schema->type) ? Base::randomElement($schema->type) : $schema->type;
 
         if (isset($schema->enum)) {
@@ -188,7 +201,7 @@ class Faker
                 $subschema = getAdditionalPropertySchema($schema, $key) ?: $this->getRandomSchema();
             }
 
-            $dummy->{$key} = $this->generate($subschema);
+            $dummy->{$key} = $this->generate($subschema, $schema);
         }
 
         return $dummy;
@@ -201,5 +214,38 @@ class Faker
         return (object)[
             'type' => Base::randomElement($fakerNames)
         ];
+    }
+
+    private function ref(\stdClass $schema, \stdClass $parentSchema = null)
+    {
+        $path = (string) $schema->{'$ref'};
+        if (substr($path, 0, 1) === '#') {
+            return $this->embedded($parentSchema, $path);
+        }
+        return $this->linkedJson($parentSchema, $path);
+    }
+
+    private function embedded(\stdClass $parentSchema, string $path)
+    {
+        $paths = explode('/', substr($path, 2));
+        $prop = $parentSchema;
+        foreach ($paths as $path) {
+            $prop = $prop->{$path};
+        }
+        $defFake = $this->generate($prop);
+
+        return $defFake;
+    }
+
+    private function linkedJson(\stdClass $parentSchema, string $path)
+    {
+        $jsonPath = sprintf('%s/%s', $this->schemaDir, str_replace('./', '', $path));
+        if (!file_exists($jsonPath)) {
+            throw new \InvalidArgumentException($this->schemaDir);
+        }
+        $refJson = json_decode(file_get_contents($jsonPath));
+        $fake = $this->generate($refJson, $parentSchema);
+
+        return $fake;
     }
 }
