@@ -50,6 +50,9 @@ class Faker
         if (property_exists($schema, '$ref')) {
             return $this->ref($schema, $parentSchems);
         }
+        if (! isset($schema->type)) {
+            throw new \Exception("No Type");
+        }
         $type = is_array($schema->type) ? Base::randomElement($schema->type) : $schema->type;
 
         if (isset($schema->enum)) {
