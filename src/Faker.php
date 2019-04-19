@@ -229,7 +229,7 @@ class Faker
         if (substr($path, 0, 1) === '#') {
             return $this->embedded($parentSchema, $path);
         }
-        return $this->linkedJson($parentSchema, $path);
+        return $this->linkedJson($path, $parentSchema);
     }
 
     private function embedded(\stdClass $parentSchema, string $path)
@@ -244,7 +244,7 @@ class Faker
         return $defFake;
     }
 
-    private function linkedJson(\stdClass $parentSchema, string $path)
+    private function linkedJson(string $path, \stdClass $parentSchema = null)
     {
         $jsonPath = sprintf('%s/%s', $this->schemaDir, str_replace('./', '', $path));
         if (!file_exists($jsonPath)) {
