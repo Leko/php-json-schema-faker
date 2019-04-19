@@ -39,16 +39,17 @@ class Faker
      * Create dummy data with JSON schema
      *
      * @param  \stdClass $schema Data structure writen in JSON Schema
+     * @param \stdClass $parentSchema parent schema when it is subschema
      * @return mixed dummy data
      * @throws \Exception Throw when unsupported type specified
      */
-    public function generate(\stdClass $schema, \stdClass $parentSchems = null)
+    public function generate(\stdClass $schema, \stdClass $parentSchema = null)
     {
         $schema = resolveOf($schema);
         $fakers = $this->getFakers();
 
         if (property_exists($schema, '$ref')) {
-            return $this->ref($schema, $parentSchems);
+            return $this->ref($schema, $parentSchema);
         }
         if (! isset($schema->type)) {
             throw new \Exception("No Type");
@@ -147,6 +148,9 @@ class Faker
         } else {
             $min = get($schema, 'minLength', 1);
             $max = get($schema, 'maxLength', max(5, $min + 1));
+            if ($max < 5) {
+                return substr(Lorem::text(5), 0, $max);
+            }
             $lorem = Lorem::text($max);
 
             if (mb_strlen($lorem) < $min) {
