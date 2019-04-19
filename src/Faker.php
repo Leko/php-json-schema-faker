@@ -7,8 +7,14 @@
 
 namespace JSONSchemaFaker;
 
+use function explode;
 use Faker\Provider\Base;
 use Faker\Provider\Lorem;
+use function file_exists;
+use function file_get_contents;
+use function implode;
+use function json_decode;
+use function substr;
 
 class Faker
 {
@@ -248,10 +254,27 @@ class Faker
     {
         $jsonPath = sprintf('%s/%s', $this->schemaDir, str_replace('./', '', $path));
         if (!file_exists($jsonPath)) {
-            throw new \InvalidArgumentException($this->schemaDir);
+            return $this->linkedDefinedSchema($jsonPath);
         }
         $refJson = json_decode(file_get_contents($jsonPath));
         $fake = $this->generate($refJson, $parentSchema);
+
+        return $fake;
+    }
+
+    private function linkedDefinedSchema(string $jsonPath)
+    {
+        $paths = explode('#', $jsonPath);
+        if (count($paths) !== 2) {
+            throw new \InvalidArgumentException($jsonPath);
+        }
+        $schemaFile = $paths[0];
+        $path = '.' . $paths[1];
+        if (! file_exists($schemaFile)) {
+            throw new \InvalidArgumentException($jsonPath);
+        }
+        $json = json_decode(file_get_contents($schemaFile));
+        $fake = $this->embedded($json, $path);
 
         return $fake;
     }
