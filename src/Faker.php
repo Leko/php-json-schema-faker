@@ -56,6 +56,9 @@ class Faker
             $this->schemaDir = $path;
             $schema = json_decode(file_get_contents($path));
         }
+        if (! $schema instanceof \stdClass) {
+            throw new \InvalidArgumentException(gettype($schema));
+        }
         $schema = resolveOf($schema);
         $fakers = $this->getFakers();
 

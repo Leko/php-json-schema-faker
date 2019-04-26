@@ -24,7 +24,7 @@ class FakerTest extends TestCase
     /**
      * @dataProvider getTypes
      */
-    public function testFakeFromFIle($type)
+    public function testFakeFromFile($type)
     {
         $schema = $this->getFile($type);
         $validator = new Validator();
@@ -33,6 +33,12 @@ class FakerTest extends TestCase
         $validator->check($actual, $schema);
 
         $this->assertTrue($validator->isValid(), json_encode($validator->getErrors(), JSON_PRETTY_PRINT));
+    }
+
+    public function testGenerateInvalidParameter()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        (new Faker)->generate(null);
     }
 
     public function getTypes()
