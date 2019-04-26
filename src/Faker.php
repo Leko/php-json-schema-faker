@@ -44,13 +44,18 @@ class Faker
     /**
      * Create dummy data with JSON schema
      *
-     * @param  \stdClass $schema Data structure writen in JSON Schema
+     * @param  \SplFileInfo|\stdClass $schema Data structure writen in JSON Schema
      * @param \stdClass $parentSchema parent schema when it is subschema
      * @return mixed dummy data
      * @throws \Exception Throw when unsupported type specified
      */
-    public function generate(\stdClass $schema, \stdClass $parentSchema = null)
+    public function generate($schema, \stdClass $parentSchema = null)
     {
+        if ($schema instanceof \SplFileInfo) {
+            $path = $schema->getFileInfo()->getRealPath();
+            $this->schemaDir = $path;
+            $schema = json_decode(file_get_contents($path));
+        }
         $schema = resolveOf($schema);
         $fakers = $this->getFakers();
 

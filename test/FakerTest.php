@@ -21,6 +21,20 @@ class FakerTest extends TestCase
         $this->assertTrue($validator->isValid(), json_encode($validator->getErrors(), JSON_PRETTY_PRINT));
     }
 
+    /**
+     * @dataProvider getTypes
+     */
+    public function testFakeFromFIle($type)
+    {
+        $schema = $this->getFile($type);
+        $validator = new Validator();
+
+        $actual = (new Faker)->generate(new \SplFileInfo($schema));
+        $validator->check($actual, $schema);
+
+        $this->assertTrue($validator->isValid(), json_encode($validator->getErrors(), JSON_PRETTY_PRINT));
+    }
+
     public function getTypes()
     {
         return [
