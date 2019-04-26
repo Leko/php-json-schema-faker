@@ -22,7 +22,7 @@ class FakerTest extends TestCase
     }
 
     /**
-     * @dataProvider getTypes
+     * @dataProvider getTypesAndFile
      */
     public function testFakeFromFile($type)
     {
@@ -53,6 +53,21 @@ class FakerTest extends TestCase
             ['object'],
             ['combining'],
             ['ref_inline']
+        ];
+    }
+
+    public function getTypesAndFile()
+    {
+        return [
+            ['boolean'],
+            ['null'],
+            ['integer'],
+            ['number'],
+            ['string'],
+            ['array'],
+            ['object'],
+            ['combining'],
+            ['ref_file']
         ];
     }
 

@@ -1,0 +1,6 @@
+{
+  "type": "object",
+  "typeOnly": {
+    "type": "array"
+  }
+}
