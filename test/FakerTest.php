@@ -51,7 +51,8 @@ class FakerTest extends TestCase
             ['string'],
             ['array'],
             ['object'],
-            ['combining']
+            ['combining'],
+            ['ref_inline']
         ];
     }
 

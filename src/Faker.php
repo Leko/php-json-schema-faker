@@ -52,9 +52,10 @@ class Faker
     public function generate($schema, \stdClass $parentSchema = null)
     {
         if ($schema instanceof \SplFileInfo) {
-            $path = $schema->getFileInfo()->getRealPath();
+            $path = $schema->getFileInfo()->getPath();
+            $file = $schema->getRealPath();
             $this->schemaDir = $path;
-            $schema = json_decode(file_get_contents($path));
+            $schema = json_decode(file_get_contents($file));
         }
         if (! $schema instanceof \stdClass) {
             throw new \InvalidArgumentException(gettype($schema));
