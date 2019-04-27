@@ -7,13 +7,10 @@
 
 namespace JSONSchemaFaker;
 
-use function dirname;
-use function explode;
 use Faker\Provider\Base;
 use Faker\Provider\Lorem;
-use function file_exists;
+use function dirname;
 use function file_get_contents;
-use function implode;
 use function json_decode;
 use function substr;
 

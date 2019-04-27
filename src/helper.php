@@ -9,9 +9,9 @@ namespace JSONSchemaFaker;
 
 use Faker\Factory;
 use Faker\Provider\Base;
-use Faker\Provider\Lorem;
 use Faker\Provider\DateTime;
 use Faker\Provider\Internet;
+use Faker\Provider\Lorem;
 
 /**
  * Get value without E_NOTICE
