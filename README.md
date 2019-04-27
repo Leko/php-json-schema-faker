@@ -21,6 +21,11 @@ use JSONSchemaFaker\Faker;
 
 $schema = json_decode(file_get_contents('./schema.json'));
 $dummy = Faker::fake($schema);
+
+or 
+
+$dummy = Faker::fake(new SplFileInfo('./schema.json')); // to support external schema file ($ref)
+
 ```
 
 ## Contribution
