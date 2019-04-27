@@ -7,6 +7,7 @@
 
 namespace JSONSchemaFaker;
 
+use function dirname;
 use function explode;
 use Faker\Provider\Base;
 use Faker\Provider\Lorem;
@@ -32,10 +33,10 @@ class Faker
      * Create dummy data with JSON schema
      *
      * @see    http://json-schema.org
-     * @param  \stdClass $schema Data structure writen in JSON Schema
+     * @param  \SplFileInfo|\stdClass $schema Data structure writen in JSON Schema
      * @return mixed dummy data
      */
-    public static function fake(\stdClass $schema)
+    public static function fake($schema)
     {
         $faker = new static();
         return $faker->generate($schema);
@@ -52,9 +53,8 @@ class Faker
     public function generate($schema, \stdClass $parentSchema = null)
     {
         if ($schema instanceof \SplFileInfo) {
-            $path = $schema->getFileInfo()->getPath();
             $file = $schema->getRealPath();
-            $this->schemaDir = $path;
+            $this->schemaDir = dirname($file);
             $schema = json_decode(file_get_contents($file));
         }
         if (! $schema instanceof \stdClass) {
