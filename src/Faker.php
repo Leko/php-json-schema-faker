@@ -57,12 +57,8 @@ class Faker
         }
         $schema = resolveOf($schema);
         $fakers = $this->getFakers();
-
         if (property_exists($schema, '$ref')) {
-            return $this->ref($schema, $parentSchema);
-        }
-        if (! isset($schema->type)) {
-            throw new \Exception("No Type");
+            return (new Ref($this, $this->schemaDir))($schema, $parentSchema);
         }
         $type = is_array($schema->type) ? Base::randomElement($schema->type) : $schema->type;
 
@@ -231,51 +227,5 @@ class Faker
         return (object)[
             'type' => Base::randomElement($fakerNames)
         ];
-    }
-
-    private function ref(\stdClass $schema, \stdClass $parentSchema = null)
-    {
-        $path = (string) $schema->{'$ref'};
-        if ($path[0] === '#' && $parentSchema instanceof \stdClass) {
-            return $this->embedded($parentSchema, $path);
-        }
-        return $this->linkedJson($path, $parentSchema);
-    }
-
-    private function embedded(\stdClass $parentSchema, string $path)
-    {
-        $paths = explode('/', substr($path, 2));
-        $prop = $parentSchema;
-        foreach ($paths as $schemaPath) {
-            $prop = $prop->{$schemaPath};
-        }
-        return $this->generate($prop);
-    }
-
-    private function linkedJson(string $path, \stdClass $parentSchema = null)
-    {
-        $jsonPath = sprintf('%s/%s', $this->schemaDir, str_replace('./', '', $path));
-        if (!file_exists($jsonPath)) {
-            return $this->linkedDefinedSchema($jsonPath);
-        }
-        $refJson = json_decode(file_get_contents($jsonPath));
-
-        return $this->generate($refJson, $parentSchema);
-    }
-
-    private function linkedDefinedSchema(string $jsonPath)
-    {
-        $paths = explode('#', $jsonPath);
-        if (count($paths) !== 2) {
-            throw new \InvalidArgumentException($jsonPath);
-        }
-        $schemaFile = $paths[0];
-        $path = '.' . $paths[1];
-        if (! file_exists($schemaFile)) {
-            throw new \InvalidArgumentException($jsonPath);
-        }
-        $json = json_decode(file_get_contents($schemaFile));
-
-        return $this->embedded($json, $path);
     }
 }
