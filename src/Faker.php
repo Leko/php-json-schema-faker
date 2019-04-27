@@ -24,11 +24,6 @@ class Faker
      */
     private $schemaDir;
 
-    public function __construct(string $schemaDir = '')
-    {
-        $this->schemaDir = $schemaDir;
-    }
-
     /**
      * Create dummy data with JSON schema
      *
