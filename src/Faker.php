@@ -246,12 +246,10 @@ class Faker
     {
         $paths = explode('/', substr($path, 2));
         $prop = $parentSchema;
-        foreach ($paths as $path) {
-            $prop = $prop->{$path};
+        foreach ($paths as $schemaPath) {
+            $prop = $prop->{$schemaPath};
         }
-        $defFake = $this->generate($prop);
-
-        return $defFake;
+        return $this->generate($prop);
     }
 
     private function linkedJson(string $path, \stdClass $parentSchema = null)
