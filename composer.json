@@ -11,6 +11,7 @@
     ],
     "require": {
         "ext-json": "*",
+        "ext-mbstring": "*",
         "fzaninotto/faker": "^1.7"
     },
     "require-dev": {
