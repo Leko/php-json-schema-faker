@@ -5,7 +5,7 @@
   ],
   "properties": {
     "typeOnly": {
-      "type": "array"
+      "$ref": "./def/ref.json"
     }
   }
 }

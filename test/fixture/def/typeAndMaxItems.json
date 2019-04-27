@@ -1,7 +1,12 @@
 {
   "type": "object",
-  "typeAndMaxItems": {
-    "type": "array",
-    "maxItems": 10
+  "required": [
+    "typeAndMaxItems"
+  ],
+  "properties": {
+    "typeAndMaxItems": {
+      "type": "array",
+      "maxItems": 10
+    }
   }
 }

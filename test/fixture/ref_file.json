@@ -2,10 +2,7 @@
   "type": "object",
   "required": [
     "typeOnly",
-    "typeAndMinItems",
-    "typeAndMaxItems",
-    "typeAndMinItems",
-    "typeAndMultipleItems"
+    "typeAndMinItems"
   ],
   "properties": {
     "typeOnly": {

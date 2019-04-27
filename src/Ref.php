@@ -50,9 +50,8 @@ class Ref
         if (! file_exists($jsonPath)) {
             return $this->inlineRefInExternalRef($jsonPath);
         }
-        $refJson = json_decode(file_get_contents($jsonPath));
 
-        return $this->faker->generate($refJson, $parentSchema);
+        return $this->faker->generate(new \SplFileInfo($jsonPath), $parentSchema);
     }
 
     private function inlineRefInExternalRef(string $jsonPath)
