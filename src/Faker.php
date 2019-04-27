@@ -259,9 +259,8 @@ class Faker
             return $this->linkedDefinedSchema($jsonPath);
         }
         $refJson = json_decode(file_get_contents($jsonPath));
-        $fake = $this->generate($refJson, $parentSchema);
 
-        return $fake;
+        return $this->generate($refJson, $parentSchema);
     }
 
     private function linkedDefinedSchema(string $jsonPath)
@@ -276,8 +275,7 @@ class Faker
             throw new \InvalidArgumentException($jsonPath);
         }
         $json = json_decode(file_get_contents($schemaFile));
-        $fake = $this->embedded($json, $path);
 
-        return $fake;
+        return $this->embedded($json, $path);
     }
 }
