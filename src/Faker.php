@@ -236,7 +236,7 @@ class Faker
     private function ref(\stdClass $schema, \stdClass $parentSchema = null)
     {
         $path = (string) $schema->{'$ref'};
-        if (substr($path, 0, 1) === '#') {
+        if ($path[0] === '#' && $parentSchema instanceof \stdClass) {
             return $this->embedded($parentSchema, $path);
         }
         return $this->linkedJson($path, $parentSchema);
