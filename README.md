@@ -1,5 +1,10 @@
+# Notice
+
+This package is no longer maintained.
+Please use [koriym/php-json-schema-faker](https://github.com/koriym/php-json-schema-faker) instead.
 
 # PHP JSON Schema Faker
+
 [![CircleCI](https://circleci.com/gh/Leko/php-json-schema-faker.svg?style=svg)](https://circleci.com/gh/Leko/php-json-schema-faker)
 [![codecov](https://codecov.io/gh/Leko/php-json-schema-faker/branch/master/graph/badge.svg)](https://codecov.io/gh/Leko/php-json-schema-faker)
 
@@ -25,9 +30,9 @@ $dummy = Faker::fake($schema);
 
 ## Contribution
 
-* Fork this repo
-* Write your code
-* Create PR to `master` branch
+- Fork this repo
+- Write your code
+- Create PR to `master` branch
 
 ## License
 
